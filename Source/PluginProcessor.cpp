@@ -166,7 +166,8 @@ bool Tape542AudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* Tape542AudioProcessor::createEditor()
 {
-    return new Tape542AudioProcessorEditor (*this);
+    //return new Tape542AudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -181,6 +182,32 @@ void Tape542AudioProcessor::setStateInformation (const void* data, int sizeInByt
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout Tape542AudioProcessor::createParameterLayout()
+{
+    // define what we want
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    // we are defining what to add for the plugin here
+    // layout.add(), depending on what type of 'GUI' we are making we will use a float, etc.
+    /*
+        based on the Rupert Neve Design, we have the following things to implement:
+        TRIM -> +/- 12 dB adjustment of level on incoming signal levels, prior to the tape circut
+    */
+
+
+
+    layout.add(std::make_unique<juce::AudioParameterBool>("tapeEnable", "Tape Enable", true)); // like or on/off/bypass button. The "Tape Effect In"
+    layout.add(std::make_unique<juce::AudioParameterFloat>("trim", "Trim", juce::NormalisableRange<float>(-12.f, 12.f, 0.1f), 0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("saturation", "Saturation", juce::NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.05f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("ips", "IPS", juce::StringArray{ "15 IPS", "30, IPS" }, 1));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("blend", "Blend", juce::NormalisableRange<float>(0.0f, 1.f, 0.01f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("silkMode", "Silk Mode", juce::StringArray{ "OFF", "RED", "BLUE" }, 0));
+
+    layout.add(std::make_unique<juce::AudioParameterBool>("stereoLink", "Stereo Link", true));
+        
+    return layout;
 }
 
 //==============================================================================
