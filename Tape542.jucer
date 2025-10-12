@@ -3,6 +3,37 @@
 <JUCERPROJECT id="GsSNxU" name="Tape542" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="Hm9I2Y" name="Tape542">
+    <GROUP id="{6D3FBFDB-5EC6-FC98-EC63-8D3C49B0B9BA}" name="DSP">
+      <FILE id="r6McS5" name="BlendProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/BlendProcessor.cpp"/>
+      <FILE id="mprs7j" name="BlendProcessor.h" compile="0" resource="0"
+            file="Source/DSP/BlendProcessor.h"/>
+      <FILE id="uzNp5P" name="DriveMeterProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/DriveMeterProcessor.cpp"/>
+      <FILE id="uaEBOq" name="DriveMeterProcessor.h" compile="0" resource="0"
+            file="Source/DSP/DriveMeterProcessor.h"/>
+      <FILE id="y30Y4i" name="IpsProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/IpsProcessor.cpp"/>
+      <FILE id="MLWV1t" name="IpsProcessor.h" compile="0" resource="0" file="Source/DSP/IpsProcessor.h"/>
+      <FILE id="lnAhO9" name="LevelMeterProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/LevelMeterProcessor.cpp"/>
+      <FILE id="iIenb0" name="LevelMeterProcessor.h" compile="0" resource="0"
+            file="Source/DSP/LevelMeterProcessor.h"/>
+      <FILE id="U5kGTN" name="SaturationProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/SaturationProcessor.cpp"/>
+      <FILE id="U89oUU" name="SaturationProcessor.h" compile="0" resource="0"
+            file="Source/DSP/SaturationProcessor.h"/>
+      <FILE id="NAnETJ" name="SilkProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/SilkProcessor.cpp"/>
+      <FILE id="LdBmxV" name="SilkProcessor.h" compile="0" resource="0" file="Source/DSP/SilkProcessor.h"/>
+      <FILE id="iqixsd" name="SoftClipProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/SoftClipProcessor.cpp"/>
+      <FILE id="rRDjf3" name="SoftClipProcessor.h" compile="0" resource="0"
+            file="Source/DSP/SoftClipProcessor.h"/>
+      <FILE id="YfrHBh" name="TrimProcessor.cpp" compile="1" resource="0"
+            file="Source/DSP/TrimProcessor.cpp"/>
+      <FILE id="go0qSq" name="TrimProcessor.h" compile="0" resource="0" file="Source/DSP/TrimProcessor.h"/>
+    </GROUP>
     <GROUP id="{37A91028-AC2C-7F40-DDDB-BF23C31B8268}" name="Source">
       <FILE id="r0gL3W" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
@@ -25,6 +56,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -51,6 +83,7 @@
         <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
   </EXPORTFORMATS>

@@ -9,6 +9,14 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DSP/TrimProcessor.h"
+#include "DSP/SaturationProcessor.h"
+#include "DSP/SoftClipProcessor.h"
+#include "DSP/BlendProcessor.h"
+#include "DSP/IpsProcessor.h"
+#include "DSP/SilkProcessor.h"
+#include "DSP/LevelMeterProcessor.h"
+#include "DSP/DriveMeterProcessor.h"
 
 //==============================================================================
 /**
@@ -59,5 +67,20 @@ public:
 
 private:
     //==============================================================================
+
+    // DSP for Gain
+
+
+    using Filter = juce::dsp::IIR::Filter<float>;
+    TrimProcessor trimProcessor;
+    SaturationProcessor saturationProcessor;
+    SoftClipProcessor softClipProcessor;
+    BlendProcessor blendProcessor;
+    IpsProcessor ipsProcessor;
+    SilkProcessor silkProcessor;
+    LevelMeterProcessor levelMeter;
+    DriveMeterProcessor driveMeter;
+
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Tape542AudioProcessor)
 };
