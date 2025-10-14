@@ -10,7 +10,7 @@
 
 #include "TrimProcessor.h"
 #include <cmath>
-#include <unordered_set>
+#include <algorithm>
 
 
 TrimProcessor::TrimProcessor()
@@ -24,10 +24,10 @@ TrimProcessor::~TrimProcessor()
 
 }
 
-void TrimProcessor::prepare(double sr) {
-    // we only want standard sampleRates
-    std::unordered_set<float> standardSampleRate{ 44100, 48000, 88200, 96000, 192000 };
-    if (standardSampleRate.find(sr)) 
+void TrimProcessor::prepare(double sr) 
+{
+
+    if (isStandardSampleRate(sr)) 
     {
         sampleRate = sr;
         updateGain();
@@ -37,18 +37,27 @@ void TrimProcessor::prepare(double sr) {
 
 void TrimProcessor::setTrimDb(float db)
 {
-    if (db <= 12.f && db >= -12) 
-    {
-        trimDb = db;
-        updateGain();
-    }
+   
+    trimDb = std::clamp(db, -12.0f, 12.0f);
+    updateGain();
+    
 }
 
-float TrimProcessor::processSample(float x)
+// doesn't modify a member state so we cna mske it as const
+float TrimProcessor::processSample(float x) const noexcept
 {
+    // TODO: optional oversampling before nonlinear stages
     return x * gainLinear;
 }
 
-void TrimProcessor::updateGain() {
+void TrimProcessor::updateGain() 
+{
     gainLinear = std::pow(10.0f, trimDb / 20.0f); // dB -> linear
+}
+bool TrimProcessor::isStandardSampleRate(float sr)
+{
+    switch (int(sr)) {
+        case 44100: case 48000: case 88200: case 96000: case 192000: return true;
+        default: return false;
+    }
 }

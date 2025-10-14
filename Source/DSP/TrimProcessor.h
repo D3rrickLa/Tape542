@@ -18,7 +18,7 @@ public:
     void prepare(double sr);
     void setTrimDb(float db);
 
-    float processSample(float x);
+    float processSample(float x) const noexcept;
 
 private:
     float trimDb;  
@@ -26,4 +26,5 @@ private:
     double sampleRate;
 
     void updateGain();
+    bool isStandardSampleRate(float sr);
 };
