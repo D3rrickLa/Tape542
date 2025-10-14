@@ -27,11 +27,3 @@ private:
 
     void updateGain();
 };
-
-TrimProcessor::TrimProcessor()
-{
-}
-
-TrimProcessor::~TrimProcessor()
-{
-}
