@@ -9,3 +9,20 @@
 */
 
 #pragma once
+class SoftClipProcessor
+{
+public:
+	SoftClipProcessor();
+	~SoftClipProcessor();
+
+    void setThreshold(float t);
+    void setActive(bool a);
+    void setDrive(float d); // will take in saturation drive and respond accordingly
+
+    float processSample(float x);
+
+
+private:
+    float thresholdLevel;
+    bool isActive;
+};
