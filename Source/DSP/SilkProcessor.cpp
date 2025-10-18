@@ -9,3 +9,10 @@
 */
 
 #include "SilkProcessor.h"
+SilkProcessor::SilkProcessor()
+{
+}
+
+SilkProcessor::~SilkProcessor()
+{
+}
