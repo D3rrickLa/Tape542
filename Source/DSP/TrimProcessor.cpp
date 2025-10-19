@@ -54,6 +54,7 @@ void TrimProcessor::updateGain()
 {
     gainLinear = std::pow(10.0f, trimDb / 20.0f); // dB -> linear
 }
+
 bool TrimProcessor::isStandardSampleRate(float sr)
 {
     switch (int(sr)) {

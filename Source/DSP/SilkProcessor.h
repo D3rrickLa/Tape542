@@ -27,6 +27,8 @@ private:
 	float texture;
 	float sampleRate;
 	OnePoleBandpass bpRed, bpBlue;
+
+	bool isStandardSampleRate(float sr);
 };
 
 class OnePoleBandpass
@@ -39,7 +41,7 @@ public:
 	float process(float x);
 
 private:
-	float center, q, q, alpha;
+	float center, q, w, alpha;
 	float sampleRate;
 	float lpState;
 };
