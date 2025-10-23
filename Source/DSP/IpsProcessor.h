@@ -29,7 +29,7 @@ class IPSProcessor
 public:
 	IPSProcessor();
 	~IPSProcessor();
-    void preprae(double sr);
+    void prepare(double sr);
     void setMode(IPSMode m);
     float processSample(float x);
 
@@ -37,7 +37,8 @@ public:
 private:
     IPSMode mode;
     double sampleRate;
-    BiQuad bqLow15, bqHi15, bqLow30, bqHi30;
+    BiQuad bqLow7_5, bqHi7_5, bqLow15, bqHi15, bqLow30, bqHi30;
 
     void buildPresets();
+    bool isStandardSampleRate(float sr);
 };

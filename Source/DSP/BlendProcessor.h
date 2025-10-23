@@ -9,3 +9,14 @@
 */
 
 #pragma once
+class BlendProcessor
+{
+public:
+	BlendProcessor();
+	~BlendProcessor();
+    void setBlend(float v);
+    float processSample(float dry, float wet);
+
+private:
+    float blend;
+};
