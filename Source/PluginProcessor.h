@@ -68,18 +68,22 @@ public:
 private:
     //==============================================================================
 
-    // DSP for Gain
+  
 
 
     using Filter = juce::dsp::IIR::Filter<float>;
+
+    // DSP Modules //
     TrimProcessor trimProcessor;
     SaturationProcessor saturationProcessor;
     SoftClipProcessor softClipProcessor;
     BlendProcessor blendProcessor;
-    IpsProcessor ipsProcessor;
+    IPSProcessor ipsProcessor;
     SilkProcessor silkProcessor;
     LevelMeterProcessor levelMeter;
     DriveMeterProcessor driveMeter;
+
+    void updateParameters(); // internal helper
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Tape542AudioProcessor)
