@@ -29,6 +29,7 @@ void BlendProcessor::setBlend(float v)
 
 float BlendProcessor::processSample(float dry, float wet)
 {
+    // equal-power crossfade: a = cos(blend * PI/2), b = sin(blend * PI/2)
     float a = cos(blend * (float)M_PI * 0.5f);
     float b = sin(blend * (float)M_PI * 0.5f);
     return dry * a + wet * b;

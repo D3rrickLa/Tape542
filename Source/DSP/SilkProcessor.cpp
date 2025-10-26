@@ -29,7 +29,7 @@ void SilkProcessor::prepare(float sr)
     {
         sampleRate = sr;
         bpRed.set(4000.0f, 0.8, sr);  // Red emphasizes highs
-        bpBlue.set(150.f, 0.8f, sr);
+        bpBlue.set(150.f, 0.8f, sr); // Blue emphasizes low/mids
     }
 }
 
@@ -50,11 +50,14 @@ float SilkProcessor::processSample(float input)
         return input;
     }
 
-    // choose badn and process 
+    // choose band and process 
     float band = (mode == SILK_RED) ? bpRed.process(input) : bpBlue.process(input);
+
+    // no-linearity on the band
+    float distorted = std::tanh(band * (1.0f + texture * 4.0f));
+    float out = input + distorted * texture * 0.5f;
+    return out;
 }
-
-
 
 bool SilkProcessor::isStandardSampleRate(float sr)
 {
