@@ -11,6 +11,22 @@
 #pragma once
 enum SilkMode { SILK_OFF, SILK_RED, SILK_BLUE };
 
+class OnePoleBandpass
+{
+public:
+	OnePoleBandpass();
+	~OnePoleBandpass();
+
+	void set(float centerHz, float qVal, float sr);
+	float process(float x);
+
+private:
+	float center, q, w, alpha;
+	float sampleRate;
+	float lpState;
+};
+
+
 class SilkProcessor
 {
 public:
@@ -26,22 +42,9 @@ private:
 	SilkMode mode;
 	float texture;
 	float sampleRate;
-	OnePoleBandpass bpRed, bpBlue;
+	OnePoleBandpass bpRed; 
+	OnePoleBandpass bpBlue;
 
 	bool isStandardSampleRate(float sr);
 };
 
-class OnePoleBandpass
-{
-public:
-	OnePoleBandpass();
-	~OnePoleBandpass();
-
-	void set(float centerHz, float qVal, float sr);
-	float process(float x);
-
-private:
-	float center, q, w, alpha;
-	float sampleRate;
-	float lpState;
-};

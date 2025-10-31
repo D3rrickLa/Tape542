@@ -14,8 +14,8 @@ enum IPSMode { IPS_7_5, IPS_15, IPS_30 };
 class BiQuad
 {
 public:
-	BiQuad();
-	~BiQuad();
+	//BiQuad();
+	//~BiQuad();
     void setCoeffs(float b0, float b1, float b2, float a1, float a2);
     float process(float x);
 

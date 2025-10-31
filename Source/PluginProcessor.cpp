@@ -12,6 +12,7 @@
 
 //==============================================================================
 Tape542AudioProcessor::Tape542AudioProcessor()
+   
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -20,9 +21,10 @@ Tape542AudioProcessor::Tape542AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+     ),  apvts(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
+    
 }
 
 Tape542AudioProcessor::~Tape542AudioProcessor()
@@ -96,6 +98,13 @@ void Tape542AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    trimProcessor.prepare(sampleRate);
+    saturationProcessor.prepare(sampleRate);
+    //softClipProcessor.prepare(sampleRate);
+    ipsProcessor.prepare(sampleRate);
+    //blendProcessor.prepare(sampleRate);
+    silkProcessor.prepare(sampleRate);
 }
 
 void Tape542AudioProcessor::releaseResources()
@@ -142,8 +151,23 @@ void Tape542AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+
+    updateParameters();
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    {
+        auto* channelData = buffer.getWritePointer(i);
+        for (int j = 0; i < buffer.getNumSamples(); ++j)
+        {
+            float x = channelData[j];
+            x = trimProcessor.processSample(x);
+            x = saturationProcessor.processSample(x);
+            x = softClipProcessor.processSample(x);
+            x = ipsProcessor.processSample(x);
+            x = blendProcessor.processSample(0.5, 0.5);
+            x = silkProcessor.processSample(x);
+        }
+    }
 
     //// This is the place where you'd normally do the guts of your plugin's
     //// audio processing...
@@ -204,13 +228,46 @@ juce::AudioProcessorValueTreeState::ParameterLayout Tape542AudioProcessor::creat
     layout.add(std::make_unique<juce::AudioParameterBool>("tapeEnable", "Tape Enable", true)); // like or on/off/bypass button. The "Tape Effect In"
     layout.add(std::make_unique<juce::AudioParameterFloat>("trim", "Trim", juce::NormalisableRange<float>(-12.f, 12.f, 0.1f), 0.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("saturation", "Saturation", juce::NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.05f));
-    layout.add(std::make_unique<juce::AudioParameterChoice>("ips", "IPS", juce::StringArray{ "15 IPS", "30, IPS" }, 1));
+    layout.add(std::make_unique<juce::AudioParameterBool>("softClip", "Soft Clip", false));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("ips", "IPS", juce::StringArray{"7.5 IPS", "15 IPS", "30, IPS"}, 1));
     layout.add(std::make_unique<juce::AudioParameterFloat>("blend", "Blend", juce::NormalisableRange<float>(0.0f, 1.f, 0.01f), 1.f));
     layout.add(std::make_unique<juce::AudioParameterChoice>("silkMode", "Silk Mode", juce::StringArray{ "OFF", "RED", "BLUE" }, 0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("texture", "Texture", 0.0f, 1.0f, 0.5f));
+
 
     layout.add(std::make_unique<juce::AudioParameterBool>("stereoLink", "Stereo Link", true));
         
     return layout;
+}
+
+void Tape542AudioProcessor::updateParameters()
+{
+    trimProcessor.setTrimDb(apvts.getRawParameterValue("trim")->load());
+    saturationProcessor.setDrive(apvts.getRawParameterValue("saturation")->load());
+    softClipProcessor.setActive(apvts.getRawParameterValue("softClip")->load() > 0.5f);
+    
+    blendProcessor.setBlend(apvts.getRawParameterValue("blend")->load());
+
+
+    // convert float -" int -" enum
+    int ipsIndex = static_cast<int>(apvts.getRawParameterValue("ips")->load());
+    switch (ipsIndex)
+    {
+        case 0: ipsProcessor.setMode(IPS_7_5); break;
+        case 1: ipsProcessor.setMode(IPS_15); break;
+        case 2: ipsProcessor.setMode(IPS_30); break;
+     }
+
+    int silkIndex = static_cast<int>(apvts.getRawParameterValue("silkMode")->load());
+    switch (silkIndex)
+    {
+        case 1:  silkProcessor.setMode(SILK_RED);  break;
+        case 2:  silkProcessor.setMode(SILK_BLUE); break;
+        default: silkProcessor.setMode(SILK_OFF);  break;
+    }
+
+    silkProcessor.setTexture(apvts.getRawParameterValue("texture")->load());
+ 
 }
 
 //==============================================================================

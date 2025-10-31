@@ -1,4 +1,4 @@
-/*
+﻿/*
   ==============================================================================
 
     This file contains the basic framework code for a JUCE plugin processor.
@@ -74,6 +74,8 @@ private:
     using Filter = juce::dsp::IIR::Filter<float>;
 
     // DSP Modules //
+
+    // Input → Trim → Saturation (with soft clip) → IPS filter → Blend → Silk (Red/Blue + Texture) → Output //
     TrimProcessor trimProcessor;
     SaturationProcessor saturationProcessor;
     SoftClipProcessor softClipProcessor;
