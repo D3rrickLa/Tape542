@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="GsSNxU" name="Tape542" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginFormats="buildAU,buildVST3">
   <MAINGROUP id="Hm9I2Y" name="Tape542">
     <GROUP id="{6D3FBFDB-5EC6-FC98-EC63-8D3C49B0B9BA}" name="DSP">
       <FILE id="aZS1Pe" name="BlendProcessor.cpp" compile="1" resource="0"
