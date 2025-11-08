@@ -142,46 +142,33 @@ bool Tape542AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void Tape542AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
 
     updateParameters();
 
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+    const int totalNumInputChannels = getTotalNumInputChannels();
+
+    for (int ch = 0; ch < totalNumInputChannels; ++ch)
     {
-        auto* channelData = buffer.getWritePointer(i);
-        for (int j = 0; i < buffer.getNumSamples(); ++j)
+        auto* channelData = buffer.getWritePointer(ch);
+
+        for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
-            float x = channelData[j];
+            float drySample = channelData[n];
+            float x = drySample;
+
             x = trimProcessor.processSample(x);
             x = saturationProcessor.processSample(x);
             x = softClipProcessor.processSample(x);
             x = ipsProcessor.processSample(x);
-            x = blendProcessor.processSample(0.5, 0.5);
+
+            // blend between dry and wet
+            x = blendProcessor.processSample(drySample, x);
+
             x = silkProcessor.processSample(x);
+
+            channelData[n] = x;
         }
     }
-
-    //// This is the place where you'd normally do the guts of your plugin's
-    //// audio processing...
-    //// Make sure to reset the state if your inner loop is processing
-    //// the samples and the outer loop is handling the channels.
-    //// Alternatively, you can process the samples with the channels
-    //// interleaved by keeping the same state.
-    //for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    //{
-    //    auto* channelData = buffer.getWritePointer (channel);
-
-    //    // ..do something to the data...
-    //}
-
 
 }
 
